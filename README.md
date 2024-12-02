@@ -1,27 +1,34 @@
-# HEAD
-HEAD: Holistic Evolutionary Autonomous Driving
+<br>
 
+![](./assets/HEAD-icon.jpg)
+<br>
 # HEAD:Holistic Evolutionary Autonomous Driving
+**HEAD (Holistic Evolutionary Autonomous Driving)** 
+
 
 ## Introduction
 
-**HEAD (Holistic Evolutionary Autonomous Driving)** 是一种通用的自进化自动驾驶软件工具，它通过结合多种算法和工具，来实现对复杂自动驾驶场景的高效处理和持续演进。该工具利用学习型算法、优化型算法和规则型算法等多种方式对驾驶场景进行分析和应对，确保系统能够在真实复杂场景中保持较高的安全性和性能。
-HEAD 的架构集成了MetaDrive仿真平台测试工具，通过仿真和实车的结合，支持对各种场景的测试和算法优化。在场景理解方面，HEAD 通过对抗场景生成、交通流建模以及边缘场景捕获等技术，持续丰富数据集，提升系统对各种驾驶环境的适应性。在算法演化中，HEAD 不仅通过自主学习和持续学习不断优化性能，还利用压力测试和智能评估等方法，确保系统在极端和复杂情况下的可靠性。
-通过这些功能，HEAD 为自动驾驶算法的持续进化提供了一个闭环的数据驱动平台，从场景生成到算法演进，再到多车协同进化，确保了系统在面对未见场景时能够不断提高智能度和适应性等性能，从而实现更加安全可信的自动驾驶系统。
+**HEAD (Holistic Evolutionary Autonomous Driving)** is an Autonomous Driving Platform with the following key features: 
+- **A General Self-Evolutionary Autonomous Driving Software Tool**: It combines learning-based, optimization-based, and rule-based algorithms to efficiently handle complex driving scenarios and ensure safety and performance.
+- **Integration with Simulation Testing**: It is deeply integrated with the MetaDrive simulation platform, enabling comprehensive testing and optimization.
+- **A Closed-Loop Data-Driven Platform**: It provides a complete closed-loop system from scenario generation to algorithm evolution, enhancing adaptability and reliability in unseen scenarios through adversarial testing and continuous learning.
 
 
 
-## Quick Start
+## 🔧Quick Start
+1. **Clone the repo**
 
-#### 环境配置
-
-Install MetaDrive via:
-
-```
-conda create -n HEAD python=3.9
-conda activate HEAD
-pip install -r requirements.txt
-```
+   Start by cloning the HEAD repository to your local machine:
+    ``` bash
+    git clone https://github.com/TJHuangteam/HEAD.git
+    cd HEAD
+   ```
+2. **Conda Env Settings and Install Dependencies**
+    ``` bash
+    conda create -n HEAD python=3.9
+    conda activate HEAD
+    pip install -r requirements.txt
+    ```
 
 
 
@@ -51,7 +58,7 @@ pip install -r requirements.txt
 
 ##### 架构
 
-![image-20241126221638002](D:\cyx\Huang‘s_group\Foudation\official\国家重点研发计划：自进化学习型自动驾驶系统关键技术\HEAD\HEAD.assets\image-20241126221638002-1732630730543-1.png)
+![closed-loop structure](./assets/closed_loop_structure.jpg)
 
 Continual Expert Imitation Learning (CEIL) 是一种有效的自动驾驶持续学习框架，它结合了强化学习和监督学习的优势，以提高自动驾驶系统在复杂场景下的训练效率和模型性能。在该框架中，通过强化学习（如Soft Actor-Critic），训练多个 RL Coaches 来执行不同场景中的策略，并生成用于模仿学习的数据。这些 RL Coaches 输入状态向量（包含车辆、自车信息、导航信息和环境信息），输出连续驾驶动作。通过在仿真环境中大量的试错学习，RL Coaches生成高质量的数据，包括状态-动作对、轨迹和策略信息。
 
@@ -65,7 +72,7 @@ Continual Expert Imitation Learning (CEIL) 是一种有效的自动驾驶持续�
 
 
 多轮迭代进化
-
+![](./assets/experiment.jpg)
 
 
 
@@ -75,8 +82,8 @@ Continual Expert Imitation Learning (CEIL) 是一种有效的自动驾驶持续�
 
 
 #### HEAD进化实验
+![](./assets/experiment_2.jpg)
 
-![image-20241126222037585](D:\cyx\Huang‘s_group\Foudation\official\国家重点研发计划：自进化学习型自动驾驶系统关键技术\HEAD\HEAD.assets\image-20241126222037585.png)
 
 
 
@@ -100,7 +107,7 @@ Website:[MetaDrive | MetaDriverse](https://metadriverse.github.io//metadrive/)
 
 
 
-```
+``` text
 @article{yang2024guarantee,
   title={How to guarantee driving safety for autonomous vehicles in a real-world environment: a perspective on self-evolution mechanisms},
   author={Yang, Shuo and Huang, Yanjun and Li, Li and Feng, Shuo and Na, Xiaoxiang and Chen, Hong and Khajepour, Amir},
@@ -114,10 +121,19 @@ Website:[MetaDrive | MetaDriverse](https://metadriverse.github.io//metadrive/)
 
 ## Relevant Projects
 
-Metadrive: Composing diverse driving scenarios for generalizable reinforcement learning
+**Metadrive: Composing diverse driving scenarios for generalizable reinforcement learning**
+\
 Li, Quanyi and Peng, Zhenghao and Feng, Lan and Zhang, Qihang and Xue, Zhenghai and Zhou, Bolei
-IEEE Transactions on Pattern Analysis and Machine Intelligence
-
+\
+*IEEE Transactions on Pattern Analysis and Machine Intelligence*
+\
+[
+<a href="https://arxiv.org/pdf/2109.12674.pdf">Paper</a>
+|
+<a href="https://metadriverse.github.io/metadrive-simulator/">Website</a>
+|
+<a href="https://github.com/metadriverse/metadrive">Code</a>
+]
 
 
 
