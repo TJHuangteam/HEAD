@@ -1,11 +1,8 @@
 <br>
 
-![](./assets/HEAD-icon.jpg)
+![](./assets/HEAD-icon.png)
 <br>
 # HEAD:Holistic Evolutionary Autonomous Driving
-**HEAD (Holistic Evolutionary Autonomous Driving)** 
-
-
 ## Introduction
 
 **HEAD (Holistic Evolutionary Autonomous Driving)** is an Autonomous Driving Platform with the following key features: 
