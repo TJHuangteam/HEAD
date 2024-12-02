@@ -9,9 +9,7 @@
 - **A General Self-Evolutionary Autonomous Driving Software Tool**: It combines learning-based, optimization-based, and rule-based algorithms to efficiently handle complex driving scenarios and ensure safety and performance.
 - **Integration with Simulation Testing**: It is deeply integrated with the MetaDrive simulation platform, enabling comprehensive testing and optimization.
 - **A Closed-Loop Data-Driven Platform**: It provides a complete closed-loop system from scenario generation to algorithm evolution, enhancing adaptability and reliability in unseen scenarios through adversarial testing and continuous learning.
-
-
-
+![](./assets/HEAD-structure.png)
 ## 🔧Quick Start
 1. **Clone the repo**
 
@@ -26,71 +24,61 @@
     conda activate HEAD
     pip install -r requirements.txt
     ```
+   
+## Adversarial Loop
+The adversarial loop refers to a training framework where adversarial examples or environmental perturbations are introduced to improve the robustness and generalization ability of a model. 
+\
+Adversarial loops are commonly used in reinforcement learning and security research to enhance an agent's adaptability to uncertain and harsh environments.
+1. **Enter Adversarial Loop**
+
+2. **Launch Basic Experiment**
+
+
+## Algorithmic Evolution Loop
+The algorithmic evolution loop is a machine learning strategy that simulates the biological process of evolution, involving the competition and cooperation of multiple algorithms. 
+\
+The algorithmic evolution loop is widely used in fields such as automated machine learning and reinforcement learning to automatically optimize algorithm architectures or strategies.
+1. **Enter Algorithmic Evolution Loop**
+
+2. **Launch Basic Experiment**
+
+## Self-Learning Loop
+A self-learning loop is an unsupervised learning strategy where the model learns through self-supervision. 
+\
+The self-training loop is commonly used in scenarios with limited labeled data or high annotation costs, such as image classification and natural language processing.
+1. **Enter Self-Learning Loop**
+
+2. **Launch Basic Experiment**
+
+
+## Typical Experiments Result
+
+### Algorithmic Evolution Loop
+![Algorithmic Evolution Loop Result](./assets/experiment.jpg)
+The experimental results demonstrate that the **Algorithmic Evolution Loop**, powered by the Mixture of Progressive Experts (MoPE), 
+significantly improves the performance of autonomous driving systems. 
+By leveraging gradual optimization, dynamic expansion of the expert network, and adaptive mechanisms, this loop enables the system to effectively handle complex and edge cases. 
+Through iterative learning from new failure cases and continuous adaptation in dynamic environments, the loop drives rapid model evolution, leading to enhanced performance and robustness over time.
 
 
 
 
-
-
-
-#### 对抗环
-
-对抗场景生成
-
-
-
-#### 算法环
-
-持续学习
-
-
-
-#### 自学习环
-
-
-
-## Examples
-
-#### 算法环实验
-
-##### 架构
-
-![closed-loop structure](./assets/closed_loop_structure.jpg)
-
-Continual Expert Imitation Learning (CEIL) 是一种有效的自动驾驶持续学习框架，它结合了强化学习和监督学习的优势，以提高自动驾驶系统在复杂场景下的训练效率和模型性能。在该框架中，通过强化学习（如Soft Actor-Critic），训练多个 RL Coaches 来执行不同场景中的策略，并生成用于模仿学习的数据。这些 RL Coaches 输入状态向量（包含车辆、自车信息、导航信息和环境信息），输出连续驾驶动作。通过在仿真环境中大量的试错学习，RL Coaches生成高质量的数据，包括状态-动作对、轨迹和策略信息。
-
-随后，Continual Model 对这些数据进行模仿学习。训练是逐步进行的，每阶段会引入一个新的子专家模型（Expert），通过监督学习模仿前一阶段的教练行为，以最小化预测误差。在整个训练过程中，持续学习模型的门控机制帮助模型合理选择和使用最适合当前场景的子专家模型，从而提高了多场景下的适应性和决策精度。
-
-整个流程通过 RL Coaches 生成的数据逐步训练 Continual Model，使其具备理解和应对不同驾驶场景的能力。最终，模型在已知和新场景中进行测试，验证其泛化能力，确保在复杂环境中保持良好表现。这种方法有效地提高了模型的鲁棒性和进化能力，使其在自动驾驶等复杂任务中具备广泛的适应性。
-
-
-
-##### 实验结果
-
-
-多轮迭代进化
-![](./assets/experiment.jpg)
-
-
-
-
-
-
-
-
-#### HEAD进化实验
-![](./assets/experiment_2.jpg)
-
+#### HEAD Evolution Experiment
+![HEAD Evolution Experiment](./assets/experiment_2.jpg)
+The experimental results on the **HEAD** platform demonstrate a significant improvement in autonomous driving system performance in complex and uncertain scenarios.
+Through the three-round self-learning loop, the agent’s rewards steadily increased, showcasing its ability to adapt progressively to challenging environments. 
+In contrast, during the self-adversarial loop, the reward notably decreased, highlighting the effectiveness of adversarial scenarios in uncovering system weaknesses and driving further evolution. 
+Models trained over multiple rounds outperformed those trained in a single self-learning round, validating the superiority of this iterative self-evolution mechanism. 
+These findings confirm that **HEAD Evolution** paradigm enhances the intelligence and adaptability of autonomous driving systems.
 
 
 
 ## References
 
 If you use HEAD in your own work, please cite:
-
-
-
-解释
+```text
+文章？
+```
 
 
 
