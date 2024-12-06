@@ -3,13 +3,15 @@
 ![](./assets/HEAD-icon.png)
 <br>
 # HEAD:Holistic Evolutionary Autonomous Driving
+Head is your go-to platform for optimizing and evolving autonomous driving technology. Seamlessly import driving scenarios, upload models, and activate one-click training. Experience real-time performance metrics visualization, all designed to enhance your model's performance. We are committed to pushing the boundaries of autonomous driving innovation.
+\
+Head是您优化进化自动驾驶技术的首选平台。无缝导入驾驶场景，上传模型，激活一键训练。体验实时性能指标可视化，所有这些都旨在增强您的模型性能。我们致力于推动自动驾驶创新的边界。
 ## Introduction
-
 **HEAD (Holistic Evolutionary Autonomous Driving)** is an Autonomous Driving Platform with the following key features: 
 - **A General Self-Evolutionary Autonomous Driving Software Tool**: It combines learning-based, optimization-based, and rule-based algorithms to efficiently handle complex driving scenarios and ensure safety and performance.
 - **Integration with Simulation Testing**: It is deeply integrated with the MetaDrive simulation platform, enabling comprehensive testing and optimization.
 - **A Closed-Loop Data-Driven Platform**: It provides a complete closed-loop system from scenario generation to algorithm evolution, enhancing adaptability and reliability in unseen scenarios through adversarial testing and continuous learning.
-![](./assets/HEAD-structure.png)
+![](./assets/HEAD.jpg)
 ## 🔧Quick Start
 1. **Clone the repo**
 
