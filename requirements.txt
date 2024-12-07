@@ -1,0 +1,15 @@
+gym~=0.26.2
+numpy~=1.24.2
+gymnasium~=0.28.1
+opencv-python~=4.9.0.80
+h5py~=3.11.0
+panda3d~=1.10.13
+pandas~=2.2.1
+matplotlib~=3.8.4
+scipy~=1.13.0
+pygame~=2.5.2
+seaborn~=0.13.2
+yaml~=0.1.6
+pyyaml~=6.0.1
+torch~=2.2.2+cu118
+easydict~=1.13

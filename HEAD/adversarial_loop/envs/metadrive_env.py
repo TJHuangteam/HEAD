@@ -203,11 +203,11 @@ class MetaDriveEnv(BaseEnv):
             )
         return done, done_info
 
-    def cost_function(self, vehicle_id: str): # 成本最小化 和 奖励最大化 ；cost func是一个优化方向，主要保障安全性
+    def cost_function(self, vehicle_id: str):
         vehicle = self.agents[vehicle_id]
         step_info = dict()
         step_info["cost"] = 0
-        if self._is_out_of_road(vehicle): # 进入判断，是否vehicle发生以下行为
+        if self._is_out_of_road(vehicle):
             step_info["cost"] = self.config["out_of_road_cost"]
         elif vehicle.crash_vehicle:
             step_info["cost"] = self.config["crash_vehicle_cost"]
@@ -225,11 +225,10 @@ class MetaDriveEnv(BaseEnv):
             flag: Whether this vehicle arrives its destination.
         """
         long, lat = vehicle.navigation.final_lane.local_coordinates(vehicle.position)
-        # long，lat代表frenet坐标系下的横纵向位置；每个object下设navigation信息，local）coordinates是转换坐标函数
         flag = (vehicle.navigation.final_lane.length - 5 < long < vehicle.navigation.final_lane.length + 5) and (
             vehicle.navigation.get_current_lane_width() / 2 >= lat >=
             (0.5 - vehicle.navigation.get_current_lane_num()) * vehicle.navigation.get_current_lane_width()
-        ) # 判断是否在destination范围区间
+        )
         return flag
 
     def _is_out_of_road(self, vehicle):
@@ -244,49 +243,36 @@ class MetaDriveEnv(BaseEnv):
 
     def reward_function(self, vehicle_id: str):
         """
-        计算指定车辆的奖励值，基于其动作和位置。
-        可以重写该函数来修改奖励结构。
-
-        :param vehicle_id: 环境中车辆（智能体）的标识符。
-        :return: 为该车辆计算的奖励值。
+        Override this func to get a new reward function
+        :param vehicle_id: id of BaseVehicle
+        :return: reward
         """
-        vehicle = self.agents[vehicle_id]  # 根据车辆ID获取智能体（车辆）对象
-        step_info = dict()  # 字典，用于存储每一步的奖励相关信息
+        vehicle = self.agents[vehicle_id]
+        step_info = dict()
 
-        # 检查车辆是否在其参考车道（目标或分配车道）内
-        # 参考车道定义为车辆当前应该遵循的车道集合
+        # Reward for moving forward in current lane
         if vehicle.lane in vehicle.navigation.current_ref_lanes:
-            current_lane = vehicle.lane  # 将当前车道设为车辆所在车道
-            positive_road = 1  # 表示车辆在正确的车道上
+            current_lane = vehicle.lane
+            positive_road = 1
         else:
-            # 如果不在参考车道内，将第一个参考车道作为目标车道
             current_lane = vehicle.navigation.current_ref_lanes[0]
             current_road = vehicle.navigation.current_road
-            # 检查当前道路是否为反向车道
             positive_road = 1 if not current_road.is_negative_road() else -1
-
-        # 计算车辆在当前车道内的纵向和横向位置
         long_last, _ = current_lane.local_coordinates(vehicle.last_position)
         long_now, lateral_now = current_lane.local_coordinates(vehicle.position)
 
-        # 对保持车辆在车道内的奖励：
-        # 该部分对横向偏离进行惩罚，以鼓励车辆保持在车道范围内
+        # reward for lane keeping, without it vehicle can learn to overtake but fail to keep in lane
         if self.config["use_lateral_reward"]:
-            # 基于离车道中心的横向距离的奖励因子
             lateral_factor = clip(1 - 2 * abs(lateral_now) / vehicle.navigation.get_current_lane_width(), 0.0, 1.0)
         else:
-            lateral_factor = 1.0  # 如果禁用横向奖励，将横向因子设为1（无惩罚）
+            lateral_factor = 1.0
 
-        # 初始化奖励值
         reward = 0.0
-        # 对在车道内前进的奖励（与纵向移动的距离成比例）
         reward += self.config["driving_reward"] * (long_now - long_last) * lateral_factor * positive_road
-        # 对保持速度的奖励（与车辆速度与最大速度的比例相关）
         reward += self.config["speed_reward"] * (vehicle.speed_km_h / vehicle.max_speed_km_h) * positive_road
 
-        step_info["step_reward"] = reward  # 存储每一步的奖励信息
+        step_info["step_reward"] = reward
 
-        # 可以在此处处理附加条件，例如到达目的地、冲出路面、碰撞......
         if self._is_arrive_destination(vehicle):
             reward = +self.config["success_reward"]
         elif self._is_out_of_road(vehicle):
@@ -298,19 +284,12 @@ class MetaDriveEnv(BaseEnv):
         return reward, step_info
 
     def setup_engine(self):
-        """
-        设置环境的引擎，包括地图、交通和对象管理器。
-        """
-        super(MetaDriveEnv, self).setup_engine()  # 调用父类的 setup_engine 方法，初始化引擎
-        # 导入所需的管理器模块
+        super(MetaDriveEnv, self).setup_engine()
         from metadrive.manager.traffic_manager import PGTrafficManager
         from metadrive.manager.pg_map_manager import PGMapManager
         from metadrive.manager.object_manager import TrafficObjectManager
-        # 注册地图管理器，用于生成和管理地图
         self.engine.register_manager("map_manager", PGMapManager())
-        # 注册交通管理器，用于管理交通流和车辆行为
         self.engine.register_manager("traffic_manager", PGTrafficManager())
-        # 如果事故概率不为零，注册对象管理器，用于管理交通对象，如障碍物等
         if abs(self.config["accident_prob"] - 0) > 1e-2:
             self.engine.register_manager("object_manager", TrafficObjectManager())
 

@@ -1,6 +1,7 @@
 import copy
+import math
+
 from metadrive.component.navigation_module.node_network_navigation import NodeNetworkNavigation
-from typing import Union, Tuple, Dict
 
 import yaml
 import numpy as np
@@ -98,7 +99,8 @@ def lamp(v, x, y):
     return y[0] + (v - x[0]) * (y[1] - y[0]) / (x[1] - x[0] + 1e-10)
 
 def parse_args_cfgs():
-    cfg_file_path = "./config.yaml"
+    # cfg_file_path = "./config.yaml"
+    cfg_file_path = "./config_test.yaml"
     cfg_from_yaml_file(cfg_file_path, cfg)
     cfg.EXP_GROUP_PATH = '/'.join(cfg_file_path.split('/')[1:-1])  # remove 'cfgs' and 'xxxx.yaml'
     return cfg
@@ -132,10 +134,13 @@ class SACEnv(BaseEnv):
         # constraints
         cfg = parse_args_cfgs()
         self.targetSpeed = float(cfg.GYM_ENV.TARGET_SPEED)
-        self.maxSpeed = float(cfg.GYM_ENV.MAX_SPEED)
+        self.maxSpeed = None
+        self.maxSpeed_0 = float(cfg.GYM_ENV.MAX_SPEED_0)
+        self.maxSpeed_1 = float(cfg.GYM_ENV.MAX_SPEED_1)
         self.minSpeed = float(cfg.GYM_ENV.MIN_SPEED)
         self.LANE_WIDTH = float(cfg.CARLA.LANE_WIDTH)
         self.N_SPAWN_CARS = int(cfg.TRAFFIC_MANAGER.N_SPAWN_CARS)
+        self.lane_change_flag = False
 
     def _post_process_config(self, config):
         config = super(SACEnv, self)._post_process_config(config)
@@ -271,46 +276,85 @@ class SACEnv(BaseEnv):
         vehicle = self.agents[vehicle_id]
         step_info = dict()
         lidar = self.engine.get_sensor("lidar")
+        all_objects = self.engine.get_objects()
+        filter = list(all_objects.keys())
+        try:
+            adv_id = filter[1]
+            state_vector = self.state_input_vector(adv_id)
+            adv = all_objects[filter[0]]
+            ego = all_objects[filter[1]]
+            adv_current_lane_index = adv.navigation.current_lane.index[-1]
+            ego_current_lane_index = ego.navigation.current_lane.index[-1]
+        except:
+            state_vector = np.zeros(5)
+            adv = all_objects[filter[0]]
+            adv_current_lane_index = adv.navigation.current_lane.index[-1]
+            ego_current_lane_index = None
+
         '''******   Reward Design   ******'''
         # 势场奖励
-        # s_len = 5.037  ##车长
-        # d_width = 2.077  ##车宽
+        s_len = 5.037  ##车长
+        d_width = 2.077  ##车宽
         # k_f = 0.001
-        # deta_1 = 8
-        # deta_2 = 10
-        # reward_factor = -18
-        # scale = math.exp(((0.8 - d_width) ** 2 / deta_1 ** 2) + ((20 - s_len) ** 2 / deta_2 ** 2))  ###
-        # k = -reward_factor / (k_f * scale - k_f)
-        # b = reward_factor - k * k_f
-        # reward_dis = 0
-        # # dd = abs(state_vector[1]) ###
+        k_f = 0.0015
+        deta_1 = 8
+        deta_2 = 10
+        reward_factor = -18
+        scale = math.exp(((0.8 - d_width) ** 2 / deta_1 ** 2) + ((20 - s_len) ** 2 / deta_2 ** 2))  ###
+        k = -reward_factor / (k_f * scale - k_f)
+        b = reward_factor - k * k_f
+        reward_dis = 0
+        dd = abs(state_vector[4]) ###
         # dd = 5 ###
-        # # ds = abs(state_vector[0]) ###
+        ds = abs(state_vector[0]) ###
         # ds = 3.5 ###
-        # r = min((math.exp((min(max(dd - d_width, 0.0), 150) ** 2 / deta_1 ** 2) + (
-        #         (min(max(ds - s_len, 0.0), 150)) ** 2 / deta_2 ** 2)) * k_f * k + b), 0)
-        # reward_dis += r * 0.15
-        # # print('dis_reward:',reward_dis)
+        r = min((math.exp((min(max(dd - d_width, 0.0), 150) ** 2 / deta_1 ** 2) + (
+                (min(max(ds - s_len, 0.0), 150)) ** 2 / deta_2 ** 2)) * k_f * k + b), 0)
+        reward_dis += r * 0.15
+        reward_dis = -reward_dis
+        if adv_current_lane_index != ego_current_lane_index:
+            reward_dis = 0
+        print('reward_dis:', reward_dis)
+
+
+        # # 换道奖励（一次性）
+        # reward_lane_change = 0
+        # if self.lane_change_flag == False and adv_current_lane_index == ego_current_lane_index:
+        #     self.lane_change_flag = True
+        #     reward_lane_change = 40
+        # else:
+        #     self.lane_change_flag == False
+        # print('reward_lane_change:', reward_lane_change)
 
         v_S = vehicle.speed
-
+        if adv_current_lane_index != ego_current_lane_index:
+            self.maxSpeed = self.maxSpeed_0
+        else:
+            self.maxSpeed = self.maxSpeed_1
         # 速度奖励
         scaled_speed_l = lamp(v_S, [0, self.minSpeed], [0, 1])
         scaled_speed_h = lamp(v_S, [self.minSpeed, self.maxSpeed], [0, 1])
-        reward_hs_l = 0.5
-        reward_hs_h = 4.0
+        # reward_hs_l = 0.5
+        reward_hs_l = 0.2
+        # reward_hs_h = 4.0
+        reward_hs_h = 3
         reward_speed = reward_hs_l * np.clip(scaled_speed_l, 0, 1) + reward_hs_h * np.clip(scaled_speed_h, 0, 1)
+        if v_S > self.maxSpeed:
+            reward_speed = 0
+        print('reward_speed:', reward_speed)
 
-        # 碰撞惩罚
-        collision = vehicle.crash_vehicle or vehicle.crash_sidewalk or vehicle.crash_human or vehicle.crash_human or vehicle.crash_building or self._is_out_of_road(vehicle)
+        # 碰撞惩罚（or奖励）
+        # collision = vehicle.crash_vehicle or vehicle.crash_sidewalk or vehicle.crash_human or vehicle.crash_human or vehicle.crash_building or self._is_out_of_road(vehicle)
+        collision = vehicle.crash_vehicle
         if collision:
-            reward_cl = -30.0
+            reward_cl = 300.0
+            print('Collision!!!')
         else:
             reward_cl = 0.0
 
-        reward = reward_cl + reward_speed
+        reward = reward_dis + reward_cl + reward_speed
         step_info["step_reward"] = reward
-
+        # print("state_vector:", state_vector)
         return reward, step_info
 
     def obs_function(self, vehicle_id: str) :
@@ -333,3 +377,20 @@ class SACEnv(BaseEnv):
         if abs(self.config["accident_prob"] - 0) > 1e-2:
             self.engine.register_manager("object_manager", TrafficObjectManager())
 
+    def state_input_vector(self, v_id):
+        # Paper: Automated Speed and Lane Change Decision Making using Deep Reinforcement Learning
+        state_vector = np.zeros(5)
+        all_objects = self.engine.get_objects()
+        adv = self.agent
+        ego = all_objects[v_id]
+        # No normalized
+        state_vector[0] = adv.position[0] - ego.position[0]  # 纵向距离
+        state_vector[1] = adv.speed - ego.speed  # 速度差
+        state_vector[2] = ego.speed  # ego速度
+        # state_vector[3] = current_acc
+        state_vector[4] = - abs(adv.position[1] - ego.position[1])  # 横向距离，适配模型，故出现负号
+        # Normalized
+        # state_vector[0] = (obj_mat[0] - ego_s) / 100
+        # state_vector[1] = np.clip(lamp(obj_mat[2] - v_S, [-20, 10], [0, 1]), 0, 1)
+        # state_vector[2] = np.clip(v_S / 20, 0, 1)
+        return state_vector

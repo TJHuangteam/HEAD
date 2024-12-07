@@ -32,9 +32,13 @@ The adversarial loop refers to a training framework where adversarial examples o
 \
 Adversarial loops are commonly used in reinforcement learning and security research to enhance an agent's adaptability to uncertain and harsh environments.
 1. **Enter Adversarial Loop**
-
+   ```bash
+   cd ./HEAD/adversarial_loop
+   ```
 2. **Launch Basic Experiment**
-
+   ```bash
+   python training_main.py
+   ```
 
 ## Algorithmic Evolution Loop
 The algorithmic evolution loop is a machine learning strategy that simulates the biological process of evolution, involving the competition and cooperation of multiple algorithms. 
@@ -50,7 +54,7 @@ A self-learning loop is an unsupervised learning strategy where the model learns
 The self-training loop is commonly used in scenarios with limited labeled data or high annotation costs, such as image classification and natural language processing.
 1. **Enter Self-Learning Loop**
    ```bash
-   cd ./self-learning_loop
+   cd ./HEAD/self-learning_loop
    ```
    
 2. **Real Scenario Reproduction**
