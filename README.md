@@ -49,10 +49,37 @@ A self-learning loop is an unsupervised learning strategy where the model learns
 \
 The self-training loop is commonly used in scenarios with limited labeled data or high annotation costs, such as image classification and natural language processing.
 1. **Enter Self-Learning Loop**
+   ```bash
+   cd ./self-learning_loop
+   ```
+   
+2. **Real Scenario Reproduction**
+   ```bash
+   cd ./scenario_reproduction
+   ```
+   1. Convert the recorded bag files from the actual vehicle to csv files
+   \
+   PS: Please note your ROS version
+   `rostopic echo -b input.bag -p /output > output.csv`
+   2. In **obj_info.py**, load your bag file, extract vehicle and pedestrian information, and store it as an **obj_info.pkl** file.
+   3. Load the map osm file, and in **osm_scenario.py**, extract road information and save in **map_features.pkl**.
+   4. In **run_main.py**, load vehicle and pedestrian information **obj_info.pkl** and  map lane information **map_features.pkl**, integrate the information into  `ScenarioDescription` format for reproduction in metadrive, and save in the `dataset/`.
+   5. If you'd like to visualize the transferred scenario, please run:
+      ```bash
+      python -m scenarionet.sim -d /path_to_your scenario_reproduction/dataset --render 2D/3D
+      ```
+3. **Launch Basic Experiment**
 
-2. **Launch Basic Experiment**
-
-
+Run **SAC\_multi\_scenario\_con.py**
+\
+Set the `--database_path` to processed dataset for training and evaluation.
+\
+This file is the main function for training and evaluating the reinforcement learning agent.
+\
+The training and testing process can be viewed online via tensorboard:
+`tensorboard --logdir = /path_to_your_model/test`
+\
+PS: You can also load public datasets such as waymo, nuscenes, nuplan(which need to be processed by scenarionet's convert to a unified format)
 ## Typical Experiments Result
 
 ### Algorithmic Evolution Loop

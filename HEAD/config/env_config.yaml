@@ -1,0 +1,76 @@
+# config for customized env
+# ===== Generalization =====
+start_seed: 0
+num_scenarios: 1
+use_render: true
+
+ # ===== PG Map Config =====
+map: SSSSSSSS
+block_dist_config: PGBlockDistConfig
+random_lane_width: false
+random_lane_num: false
+map_config: # notice: different from origin DICT
+  type: block_num
+  config: None
+  lane_width: 3.5
+  lane_num: 4
+  exit_length: 50
+store_map: true
+
+# ===== Traffic =====
+traffic_density: 0.0
+need_inverse_traffic: false
+traffic_mode: TrafficMode.Trigger
+random_traffic: false  # Traffic is randomized at default.
+traffic_vehicle_config:
+  show_navi_mark: false
+  show_dest_mark: false
+  enable_reverse: false
+  show_lidar: true
+  show_lane_line_detector: false
+  show_side_detector: false
+
+# ===== Object =====
+accident_prob: 0.0
+static_traffic_object: true
+
+# ===== Others =====
+use_AI_protector: false
+save_level: 0.5
+
+# ===== Agent =====
+random_spawn_lane_index: true
+sensors:
+  lidar:
+    - Lidar
+vehicle_config:
+  navigation_module: NodeNetworkNavigation
+  agent_policy: null
+  lidar:
+    num_lasers: 240
+    distance: 40
+    num_others: 0
+agent_configs:
+  DEFAULT_AGENT:
+    use_special_color: true
+    spawn_lane_index:
+      - FirstPGBlock.NODE_1
+      - FirstPGBlock.NODE_2
+      - 0
+    lidar:
+      num_lasers: 240
+      distance: 40
+      num_others: 0
+
+# ===== Termination Scheme =====
+out_of_route_done: false
+on_continuous_line_done: true
+crash_vehicle_done: true
+crash_object_done: true
+crash_human_done: true
+
+# ===== Multi-agent =====
+is_multi_agent: false
+
+# ===== RL-Settings =====
+horizon: 1000
