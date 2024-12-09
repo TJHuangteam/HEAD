@@ -1,7 +1,7 @@
-<br>
+<center>
+    <img src="./assets/HEAD-icon.jpg" alt="HEAD icon">
+</center>
 
-![](./assets/HEAD-icon.png)
-<br>
 # HEAD:Holistic Evolutionary Autonomous Driving
 HEAD is a holistic suite of evolutionary autonomous driving software, based on the MetaDrive simulation platform, that seamlessly imports driving scenarios, uploads training models, and efficiently performs continuous training designed to significantly improve the performance of arbitrary models.
 ## Introduction
