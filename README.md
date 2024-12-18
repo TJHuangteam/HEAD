@@ -37,12 +37,69 @@ Adversarial loops are commonly used in reinforcement learning and security resea
    ```
 
 ## Algorithmic Evolution Loop
-The algorithmic evolution loop is a machine learning strategy that simulates the biological process of evolution, involving the competition and cooperation of multiple algorithms. 
-\
-The algorithmic evolution loop is widely used in fields such as automated machine learning and reinforcement learning to automatically optimize algorithm architectures or strategies.
-1. **Enter Algorithmic Evolution Loop**
 
-2. **Launch Basic Experiment**
+The algorithmic evolution loop is based on the Dynamic Progressive Optimization Framework, 
+which supports the progressive optimization and continuous adaptation of expert agents through data aggregation 
+and multi-expert strategy distillation. 
+The framework first uses reinforcement learning to generate diverse cross-scenario datasets, 
+accumulating strategy knowledge through trial and error. 
+Subsequently, a continual learning model incrementally trains the data using imitation learning, 
+incorporating new scenarios and datasets. By embedding sub-expert models and a gating mechanism within the Mixture of Progressive Experts (MoPE), 
+the framework enables adaptive strategy learning and optimization across scenarios. 
+Ultimately, the framework generates expert agents capable of making efficient decisions and demonstrating long-term adaptability.
+
+**Enter Algorithmic Evolution Loop**
+
+```bash
+cd ./HEAD/adversarial_evolution_loop
+```
+
+**Training Reinforcement learning Experts**
+
+```
+python SAC_muti_scenario_con.py
+```
+
+**Launch Continual Model**
+
+```bash
+python Training train_MoPE.py
+```
+
+**Evaluate the Model**
+
+``` bash
+python eval_in_env.py
+```
+
+This is the PyTorch implementation for training and evaluating the MoPE project. The project mainly includes training files, testing files, and model files.
+` Training train_MoPE.py`  is used to train the MoPE model implemented in this project. train_benchmark.py is used to train the models for comparison experiments. Using ` train_MoPE.py`  as an example, the following are important parameter settings during training:
+
+--` model_path` : Path to save checkpoints
+\
+--` layers` : Number of layers per task
+\
+--` sizes` Input/output size of the model
+\
+--` task_n_epochs` : Number of epochs for round n training
+\
+--` data_paths` : Paths to the training dataset
+
+Evaluation eval_in_env.py is used to evaluate the trained model in MetaDrive:
+\
+--` expert_num` : Number of experts in the trained model
+\
+--` layers` : Number of layers per task
+\
+--` sizes` : Input/output size of the model
+\
+--` model_path` : Full path to the model checkpoint to be evaluated
+\
+--` eval_eps` : Number of evaluation episodes
+\
+--` render` : Use 1 to enable window visualization, 0 to disable
+
+Model ` MoPE.py`  is the specific implementation of the model. For more details on the model, please refer to the **Mixture of Progressive Experts** paper.
 
 ## Self-Learning Loop
 A self-learning loop is an unsupervised learning strategy where the model learns through self-supervision. 
