@@ -127,7 +127,7 @@ The self-training loop is commonly used in scenarios with limited labeled data o
       ```
 3. **Launch Basic Experiment**
 
-Run **SAC\_multi\_scenario\_con.py**
+   Run **SAC\_multi\_scenario\_con.py**
 \
 Set the `--database_path` to processed dataset for training and evaluation.
 \
