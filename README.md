@@ -163,7 +163,13 @@ These findings confirm that **HEAD Evolution** paradigm enhances the intelligenc
 
 If you use HEAD in your own work, please cite:
 ```text
-文章？
+@article{yang2024guarantee,
+  title={How to guarantee driving safety for autonomous vehicles in a real-world environment: a perspective on self-evolution mechanisms},
+  author={Yang, Shuo and Huang, Yanjun and Li, Li and Feng, Shuo and Na, Xiaoxiang and Chen, Hong and Khajepour, Amir},
+  journal={IEEE Intelligent Transportation Systems Magazine},
+  year={2024},
+  publisher={IEEE}
+}
 ```
 
 
@@ -179,12 +185,11 @@ Website:[MetaDrive | MetaDriverse](https://metadriverse.github.io//metadrive/)
 
 
 ``` text
-@article{yang2024guarantee,
-  title={How to guarantee driving safety for autonomous vehicles in a real-world environment: a perspective on self-evolution mechanisms},
-  author={Yang, Shuo and Huang, Yanjun and Li, Li and Feng, Shuo and Na, Xiaoxiang and Chen, Hong and Khajepour, Amir},
-  journal={IEEE Intelligent Transportation Systems Magazine},
-  year={2024},
-  publisher={IEEE}
+@article{li2021metadrive,
+  title={MetaDrive: Composing Diverse Driving Scenarios for Generalizable Reinforcement Learning},
+  author={Li, Quanyi and Peng, Zhenghao and Xue, Zhenghai and Zhang, Qihang and Zhou, Bolei},
+  journal={arXiv preprint arXiv:2109.12674},
+  year={2021}
 }
 ```
 
