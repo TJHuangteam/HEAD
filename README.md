@@ -44,7 +44,7 @@ and multi-expert strategy distillation.
 The framework first uses reinforcement learning to generate diverse cross-scenario datasets, 
 accumulating strategy knowledge through trial and error. 
 Subsequently, a continual learning model incrementally trains the data using imitation learning, 
-incorporating new scenarios and datasets. By embedding sub-expert models and a gating mechanism within the Mixture of Progressive Experts (MoPE), 
+incorporating new scenarios and datasets. By embedding sub-expert models and a gating mechanism within the constant learning, 
 the framework enables adaptive strategy learning and optimization across scenarios. 
 Ultimately, the framework generates expert agents capable of making efficient decisions and demonstrating long-term adaptability.
 
@@ -63,7 +63,7 @@ python SAC_muti_scenario_con.py
 **Launch Continual Model**
 
 ```bash
-python Training train_MoPE.py
+python train.py
 ```
 
 **Evaluate the Model**
@@ -72,8 +72,8 @@ python Training train_MoPE.py
 python eval_in_env.py
 ```
 
-This is the PyTorch implementation for training and evaluating the MoPE project. The project mainly includes training files, testing files, and model files.
-` Training train_MoPE.py`  is used to train the MoPE model implemented in this project. train_benchmark.py is used to train the models for comparison experiments. Using ` train_MoPE.py`  as an example, the following are important parameter settings during training:
+This is the PyTorch implementation for training and evaluating the project. The project mainly includes training files, testing files, and model files.
+` train.py`  is used to train the constant learning model implemented in this project. `train_benchmark.py` is used to train the models for comparison experiments. Using ` train.py`  as an example, the following are important parameter settings during training:
 
 --` model_path` : Path to save checkpoints
 \
@@ -99,7 +99,7 @@ Evaluation eval_in_env.py is used to evaluate the trained model in MetaDrive:
 \
 --` render` : Use 1 to enable window visualization, 0 to disable
 
-Model ` MoPE.py`  is the specific implementation of the model. For more details on the model, please refer to the **Mixture of Progressive Experts** paper.
+Model ` ConstantLearning.py`  is the specific implementation of the model.
 
 ## Self-Learning Loop
 A self-learning loop is an unsupervised learning strategy where the model learns through self-supervision. 
@@ -141,7 +141,7 @@ PS: You can also load public datasets such as waymo, nuscenes, nuplan(which need
 
 ### Algorithmic Evolution Loop
 ![Algorithmic Evolution Loop Result](./assets/experiment.jpg)
-The experimental results demonstrate that the **Algorithmic Evolution Loop**, powered by the Mixture of Progressive Experts (MoPE), 
+The experimental results demonstrate that the **Algorithmic Evolution Loop**, powered by Constant Learning, 
 significantly improves the performance of autonomous driving systems. 
 By leveraging gradual optimization, dynamic expansion of the expert network, and adaptive mechanisms, this loop enables the system to effectively handle complex and edge cases. 
 Through iterative learning from new failure cases and continuous adaptation in dynamic environments, the loop drives rapid model evolution, leading to enhanced performance and robustness over time.

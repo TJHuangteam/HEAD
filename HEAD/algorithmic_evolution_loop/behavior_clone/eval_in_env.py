@@ -6,7 +6,7 @@ from stable_baselines3.common.monitor import Monitor
 from metadrive.envs import MetaDriveEnv
 import numpy as np
 
-from MoPE import MoPE
+from ConstantLearning import MoPE
 
 
 def get_args():
